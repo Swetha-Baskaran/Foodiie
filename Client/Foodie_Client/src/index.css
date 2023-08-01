@@ -1,0 +1,24 @@
+body {
+	background-color: #f9f9f9;
+	width: 100vw;
+	overflow-x: hidden;
+}
+li {
+	text-decoration: none;
+	list-style-type: none;
+}
+
+@media (max-width: "900px") {
+	body {
+		font-size: 70%;
+	}
+}
+
+.auth {
+	height: 100vh;
+	overflow: hidden;
+}
+
+::-webkit-scrollbar {
+	display: none;
+}
