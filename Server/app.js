@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 require("./db/db");
 const userRoutes = require("./routes/userRoutes");
+const cors = require("cors");
 
 // Middleware
 app.use(express.json());
