@@ -14,7 +14,8 @@ const SubTitle = ({text}) => {
 		<Typography
 			sx={{textAlign: "center", fontWeight: "bolder", fontSize: "3rem"}}
 			variant='h3'
-			py={2}
+			pb={4}
+			pt={2}
 		>
 			{text}
 		</Typography>
@@ -25,7 +26,8 @@ const Content = ({text}) => {
 	return (
 		<Typography
 			sx={{textAlign: "center", fontSize: "1.5rem"}}
-			pb={2}
+			pb={4}
+			pt={2}
 			md-px={15}
 		>
 			{text}
@@ -37,7 +39,7 @@ const Home = () => {
 	const navigate = useNavigate();
 	return (
 		<>
-			<Grid px={{xs: 3, md: 9}}>
+			<Grid px={{xs: 3, md: 7}}>
 				<Grid
 					container
 					pb={5}
@@ -132,14 +134,8 @@ const Home = () => {
 				<Grid py={5}>
 					<SubTitle text='Our Special Menu' />
 					<Content text='It is a long established factor that a reader will distracted by the readable content of a page when looking at its layout' />
-					<Grid container spacing={{xs: 3, md: 7}} pt={7}>
-						{[1, 1, 1, 1, 1, 1].map((e, index) => {
-							return (
-								<Grid item xs={12} sm={6} md={6} lg={4} key={index}>
-									<RecipeReviewCard />
-								</Grid>
-							);
-						})}
+					<Grid container sx={{justifyContent: "center"}} spacing={3}>
+						<RecipeReviewCard />
 					</Grid>
 				</Grid>
 				<Grid
@@ -178,14 +174,8 @@ const Home = () => {
 				</Grid>
 				<Grid py={5}>
 					<SubTitle text='Whats the Menu' />
-					<Grid container spacing={{xs: 3, md: 7}} pt={9}>
-						{[1, 1, 1, 1, 1, 1].map((e, index) => {
-							return (
-								<Grid item xs={12} sm={6} md={6} lg={4} key={index}>
-									<RecipeReviewCard />
-								</Grid>
-							);
-						})}
+					<Grid container sx={{justifyContent: "center"}} spacing={3}>
+						<RecipeReviewCard />
 					</Grid>
 				</Grid>
 				{/* food lover feedback */}

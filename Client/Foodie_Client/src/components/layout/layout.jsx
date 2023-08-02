@@ -14,8 +14,6 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import MailIcon from "@mui/icons-material/Mail";
-import NotificationsIcon from "@mui/icons-material/Notifications";
 import Badge from "@mui/material/Badge";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
 import {Link} from "react-router-dom";
@@ -110,7 +108,7 @@ function DrawerAppBar(props) {
 
 	return (
 		<>
-			<Box sx={{display: "flex"}}>
+			<Box>
 				<CssBaseline />
 				<ElevationScroll {...props}>
 					<AppBar
@@ -125,7 +123,13 @@ function DrawerAppBar(props) {
 								onClick={handleDrawerToggle}
 								sx={{display: {md: "none"}}}
 							>
-								<MenuIcon />
+								<MenuIcon
+									sx={{
+										color: "black",
+										fontSize: "2rem",
+										marginRight: "1.5rem",
+									}}
+								/>
 							</IconButton>
 							<Typography
 								component='div'

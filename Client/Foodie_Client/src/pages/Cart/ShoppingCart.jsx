@@ -7,8 +7,13 @@ import CloseIcon from "@mui/icons-material/Close";
 import "./style.scss";
 import {Modal} from "@mui/material";
 import OrderConfirmation from "./OrderConfirmation";
+import {useDispatch, useSelector} from "react-redux";
 
 const ShoppingCart = () => {
+	const dispatch = useDispatch();
+	const {cartItemCount, cart, changeQuantityOfProduct} = useSelector(
+		store => store.cart
+	);
 
 	// drawer logic
 	const [isDrawerOpen, setDrawerOpen] = React.useState(false);
@@ -20,32 +25,14 @@ const ShoppingCart = () => {
 	};
 
 	// cart logic
-	const CLONE_PRODUCTS = JSON.parse(JSON.stringify(PRODUCTS));
-	const [products, setProducts] = React.useState(CLONE_PRODUCTS);
-	const [promoCode, setPromoCode] = React.useState("");
-	const [discountPercent, setDiscountPercent] = React.useState(0);
+	const [products, setProducts] = React.useState(cart);
 
-	const itemCount = products.reduce((quantity, product) => {
-		return quantity + +product.quantity;
-	}, 0);
 	const subTotal = products.reduce((total, product) => {
-		return total + product.price * +product.quantity;
+		return total + product.price;
 	}, 0);
-	const discount = (subTotal * discountPercent) / 100;
 
-	const onChangeProductQuantity = (index, event) => {
-		const value = event.target.value;
-		const valueInt = parseInt(value);
-		const cloneProducts = [...products];
-
-		// Minimum quantity is 1, maximum quantity is 100, can left blank to input easily
-		if (value === "") {
-			cloneProducts[index].quantity = value;
-		} else if (valueInt > 0 && valueInt < 100) {
-			cloneProducts[index].quantity = valueInt;
-		}
-
-		setProducts(cloneProducts);
+	const onChangeProductQuantity = (product, event) => {
+		dispatch(changeQuantityOfProduct());
 	};
 
 	const onRemoveProduct = i => {
@@ -54,24 +41,6 @@ const ShoppingCart = () => {
 		});
 
 		setProducts(filteredProduct);
-	};
-
-	const onEnterPromoCode = event => {
-		setPromoCode(event.target.value);
-	};
-
-	const checkPromoCode = () => {
-		for (var i = 0; i < PROMOTIONS.length; i++) {
-			if (promoCode === PROMOTIONS[i].code) {
-				setDiscountPercent(
-					parseFloat(PROMOTIONS[i].discount.replace("%", ""))
-				);
-
-				return;
-			}
-		}
-
-		alert("Sorry, the Promotional code you entered is not valid!");
 	};
 
 	// model
@@ -97,21 +66,20 @@ const ShoppingCart = () => {
 							<CloseIcon />
 						</IconButton>
 						<Header
-							itemCount={itemCount}
+							cartItemCount={cartItemCount}
 							handleDrawerClose={handleDrawerClose}
 						/>
 
-						{products.length > 0 ? (
+						{cart.length > 0 ? (
 							<div>
 								<ProductList
-									products={products}
+									products={cart}
 									onChangeProductQuantity={onChangeProductQuantity}
 									onRemoveProduct={onRemoveProduct}
 								/>
 
 								<Summary
 									subTotal={subTotal}
-									discount={discount}
 									tax={TAX}
 									handleDrawerClose={handleDrawerClose}
 									handleOpen={handleOpen}
@@ -120,7 +88,7 @@ const ShoppingCart = () => {
 						) : (
 							<div className='empty-product'>
 								<h3>There are no products in your cart.</h3>
-								<button onClick={() => setProducts(PRODUCTS)}>
+								<button onClick={handleDrawerClose}>
 									Shopping now
 								</button>
 							</div>
@@ -139,7 +107,7 @@ const ShoppingCart = () => {
 					alignItems: "center",
 				}}
 			>
-				<OrderConfirmation onClose={handleClose} />
+				<OrderConfirmation handleClose={handleClose} />
 			</Modal>
 		</>
 	);
@@ -156,16 +124,17 @@ function formatCurrency(value) {
 }
 
 // header
-function Header({itemCount, handleDrawerClose}) {
+function Header({cartItemCount, handleDrawerClose}) {
 	return (
 		<header className='container'>
 			<h1>CART</h1>
-			<span className='count'>{itemCount} items in the bag</span>
+			<span className='count'>{cartItemCount} items in the bag</span>
 		</header>
 	);
 }
 
 // product list
+// eslint-disable-next-line react/prop-types
 function ProductList({products, onChangeProductQuantity, onRemoveProduct}) {
 	return (
 		<section className='container'>
@@ -175,17 +144,17 @@ function ProductList({products, onChangeProductQuantity, onRemoveProduct}) {
 						<li className='row' key={index}>
 							<div className='col left'>
 								<div className='thumbnail'>
-									<a href='#'>
-										<img src={product.image} alt={product.name} />
+									<a>
+										<img src={product.img} alt={product.title} />
 									</a>
 								</div>
 								<div className='detail'>
 									<div className='name'>
-										<a href='#'>{product.name}</a>
+										<a href='#'>{product.title}</a>
 									</div>
-									<div className='description'>
+									{/* <div className='description'>
 										{product.description}
-									</div>
+									</div> */}
 									<div className='price'>
 										{formatCurrency(product.price)}
 									</div>
@@ -200,7 +169,7 @@ function ProductList({products, onChangeProductQuantity, onRemoveProduct}) {
 										step='1'
 										value={product.quantity}
 										onChange={event =>
-											onChangeProductQuantity(index, event)
+											onChangeProductQuantity(product.title, event)
 										}
 									/>
 								</div>
@@ -228,8 +197,8 @@ function ProductList({products, onChangeProductQuantity, onRemoveProduct}) {
 }
 
 // summary
-function Summary({subTotal, discount, tax, handleDrawerClose, handleOpen}) {
-	const total = subTotal - discount + tax;
+function Summary({subTotal, tax, handleDrawerClose, handleOpen}) {
+	const total = subTotal + tax;
 
 	return (
 		<section className='container'>
@@ -240,11 +209,6 @@ function Summary({subTotal, discount, tax, handleDrawerClose, handleOpen}) {
 					<li>
 						Subtotal <span>{formatCurrency(subTotal)}</span>
 					</li>
-					{discount > 0 && (
-						<li>
-							Discount <span>{formatCurrency(discount)}</span>
-						</li>
-					)}
 					<li>
 						Tax <span>{formatCurrency(tax)}</span>
 					</li>
@@ -269,35 +233,4 @@ function Summary({subTotal, discount, tax, handleDrawerClose, handleOpen}) {
 	);
 }
 
-// sample data
-const PRODUCTS = [
-	{
-		image: "https://via.placeholder.com/200x150",
-		name: "PRODUCT ITEM NUMBER 1",
-		description: "Description for product item number 1",
-		price: 5.99,
-		quantity: 2,
-	},
-	{
-		image: "https://via.placeholder.com/200x150",
-		name: "PRODUCT ITEM NUMBER 2",
-		description: "Description for product item number 1",
-		price: 9.99,
-		quantity: 1,
-	},
-];
-const PROMOTIONS = [
-	{
-		code: "SUMMER",
-		discount: "50%",
-	},
-	{
-		code: "AUTUMN",
-		discount: "40%",
-	},
-	{
-		code: "WINTER",
-		discount: "30%",
-	},
-];
 const TAX = 5;

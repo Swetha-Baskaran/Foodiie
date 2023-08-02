@@ -11,6 +11,7 @@ import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import {createTheme, ThemeProvider} from "@mui/material/styles";
+import axios from "axios";
 
 const theme = createTheme();
 
@@ -22,6 +23,24 @@ export default function Login() {
 			email: data.get("email"),
 			password: data.get("password"),
 		});
+	};
+
+	const loginUser = async () => {
+		try {
+			const url = "https://foodiie-tau.vercel.app/users/login";
+			const userData = {
+				username: "john_doe",
+				password: "secretpassword",
+			};
+
+			const response = await axios.post(url, userData);
+
+			// Assuming the server responds with a JSON object containing the token
+			const {token} = response.data;
+			console.log("Authentication token:", token);
+		} catch (error) {
+			console.error("Error logging in:", error.message);
+		}
 	};
 
 	return (
@@ -108,12 +127,15 @@ export default function Login() {
 								fullWidth
 								variant='contained'
 								sx={{mt: 3, mb: 2}}
+								onClick={() => {
+									loginUser();
+								}}
 							>
 								Sign In
 							</Button>
 							<Grid container>
 								<Grid item xs>
-									<Link to="/forgot-password" variant='body2'>
+									<Link to='/forgot-password' variant='body2'>
 										Forgot password?
 									</Link>
 								</Grid>

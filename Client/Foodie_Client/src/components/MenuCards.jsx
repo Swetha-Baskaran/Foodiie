@@ -9,8 +9,8 @@ import {addToCart} from "../redux/slice/cartSlice";
 
 export default function RecipeReviewCard() {
 	const dispatch = useDispatch();
-	const handleAddToCart = () => {
-		dispatch(addToCart());
+	const handleAddToCart = payload => {
+		dispatch(addToCart(payload));
 	};
 
 	const cardContentArray = [
@@ -65,63 +65,82 @@ export default function RecipeReviewCard() {
 	return (
 		<>
 			{cardContentArray.map((content, index) => (
-				<Card
-					key={index}
-					sx={{
-						boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px",
-						borderRadius: "15px",
-					}}
-				>
-					<CardMedia
-						component='img'
-						image={content.image}
-						alt='Paella dish'
-					/>
-					<CardContent m={2}>
-						<Typography variant='h5' sx={{fontWeight: "bolder"}} mb={1}>
-							{content.title}
-						</Typography>
-						<Typography variant='body2' color='text.secondary'>
-							{content.description}
-						</Typography>
-						<Grid
-							py={2}
-							sx={{display: "flex", justifyContent: "space-between"}}
-						>
-							<Rating name='read-only' value={content.rating} readOnly />
-							<Typography>{`(${content.reviews}) Reviews`}</Typography>
-						</Grid>
-						<Grid
-							mt={1}
-							sx={{display: "flex", justifyContent: "space-between"}}
-						>
+				<Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+					<Card
+						sx={{
+							boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px",
+							borderRadius: "15px",
+						}}
+					>
+						<CardMedia
+							component='img'
+							image={content.image}
+							alt='Paella dish'
+							sx={{borderRadius: "15px"}}
+						/>
+						<CardContent m={2}>
 							<Typography
-								sx={{fontWeight: "bolder", fontSize: "1.5rem"}}
+								variant='h5'
+								sx={{fontWeight: "bolder"}}
+								mb={1}
 							>
-								${content.price}
+								{content.title}
 							</Typography>
-							<Grid sx={{justifyContent: "space-between"}}>
-								<Button
-									variant='contained'
-									sx={{
-										background: "#ff5331",
-										borderRadius: "7px",
-										marginRight: "1rem",
-									}}
-									onClick={handleAddToCart}
-								>
-									Add to Cart
-								</Button>
-								<Button
-									variant='contained'
-									sx={{background: "#ff5331", borderRadius: "7px"}}
-								>
-									Buy
-								</Button>
+							<Typography variant='body2' color='text.secondary'>
+								{content.description.length > 20
+									? content.description.slice(0, 60) + "..."
+									: content.description}
+							</Typography>
+							<Grid
+								py={2}
+								sx={{display: "flex", justifyContent: "space-between"}}
+							>
+								<Rating
+									name='read-only'
+									value={content.rating}
+									readOnly
+								/>
+								<Typography>{`(${content.reviews}) Reviews`}</Typography>
 							</Grid>
-						</Grid>
-					</CardContent>
-				</Card>
+							<Grid
+								mt={1}
+								sx={{display: "flex", justifyContent: "space-between"}}
+							>
+								<Typography
+									sx={{fontWeight: "bolder", fontSize: "1.5rem"}}
+								>
+									${content.price}
+								</Typography>
+								<Grid sx={{justifyContent: "space-between"}}>
+									<Button
+										variant='contained'
+										sx={{
+											background: "#ff5331",
+											borderRadius: "7px",
+											marginRight: "1rem",
+										}}
+										onClick={() => {
+											handleAddToCart({
+												img: content.image,
+												title: content.title,
+												description: content.description,
+												price: content.price,
+											});
+										}}
+									>
+										Add to Cart
+									</Button>
+									<Button
+										variant='contained'
+										sx={{background: "#ff5331", borderRadius: "7px"}}
+									>
+										Buy
+									</Button>
+								</Grid>
+							</Grid>
+						</CardContent>
+					</Card>
+				</Grid>
 			))}
 		</>
 	);

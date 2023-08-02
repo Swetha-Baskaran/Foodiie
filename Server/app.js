@@ -5,6 +5,7 @@ const userRoutes = require("./routes/userRoutes");
 
 // Middleware
 app.use(express.json());
+app.use(cors());
 
 // Routes
 app.use("/users", userRoutes);

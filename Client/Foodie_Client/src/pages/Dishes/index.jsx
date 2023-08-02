@@ -13,25 +13,34 @@ const Dishes = () => {
 
 	return (
 		<>
-			<Grid py={4} sx={{display: "flex", justifyContent: "center"}}>
-				<Tabs
-					value={value}
-					onChange={handleChange}
-					aria-label='disabled tabs example'
+			<Grid
+				container
+				sx={{
+					justifyContent: "center",
+					flexDirection: "column",
+					alignItems: "center",
+				}}
+			>
+				<Grid py={4} item>
+					<Tabs
+						value={value}
+						onChange={handleChange}
+						aria-label='disabled tabs example'
+					>
+						<Tab label='Starters' />
+						<Tab label='Main Course' />
+						<Tab label='Dessert' />
+					</Tabs>
+				</Grid>
+
+				<Grid
+					container
+					px={{xs: 1, md: 5}}
+					sx={{justifyContent: "center"}}
+					spacing={3}
 				>
-					<Tab label='Starters' />
-					<Tab label='Main Course' />
-					<Tab label='Dessert' />
-				</Tabs>
-			</Grid>
-			<Grid container spacing={7} px={{xs: 3, md: 9}}>
-				{[1, 1, 1].map((e, index) => {
-					return (
-						<Grid item xs={12} sm={6} md={6} lg={4} key={index}>
-							<RecipeReviewCard />
-						</Grid>
-					);
-				})}
+					<RecipeReviewCard />
+				</Grid>
 			</Grid>
 		</>
 	);
