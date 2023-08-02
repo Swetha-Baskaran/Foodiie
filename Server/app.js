@@ -21,6 +21,14 @@ app.use((req, res, next) => {
 // Routes
 app.use("/users", userRoutes);
 
+// Simple GET API for testing
+app.get("/api/test", (req, res) => {
+  const data = {
+    message: "This is a simple test API response.",
+  };
+  res.json(data);
+});
+
 // Error handling
 app.use((err, req, res, next) => {
 	console.error(err.stack);
