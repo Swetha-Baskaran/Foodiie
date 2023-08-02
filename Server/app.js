@@ -5,8 +5,18 @@ const userRoutes = require("./routes/userRoutes");
 const cors = require("cors"); // Import the cors package
 
 // Middleware
-app.use(cors()); // Use the cors middleware to enable CORS for all routes
 app.use(express.json());
+app.use(cors()); // Use the cors middleware to enable CORS for all routes
+
+// cors() is giving some issues so using this
+app.use((req, res, next) => {
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header(
+		"Access-Control-Allow-Headers",
+		"Origin, X-Requested-With, Content-Type, Accept"
+	);
+	next();
+});
 
 // Routes
 app.use("/users", userRoutes);

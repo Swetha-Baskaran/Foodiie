@@ -27,7 +27,7 @@ export default function Login() {
 
 	const loginUser = async () => {
 		try {
-			const url = "https://foodiie-tau.vercel.app/users/login";
+			const url = "https://foodiie-tau.vercel.app/users/login"; // Correct backend URL
 			const userData = {
 				username: "john_doe",
 				password: "secretpassword",
