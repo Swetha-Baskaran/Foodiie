@@ -26,7 +26,10 @@ export default function Login() {
 
 		try {
 			const url = "https://foodiie-navy.vercel.app/users/login";
-			const response = await axios.post(url, {username: email, password});
+			const response = await axios.post(url, {
+				username: "swethab@pec.edu",
+				password: "swetha",
+			});
 			const {token} = response.data;
 			console.log("Authentication token:", token);
 			localStorage.setItem("jwtToken", token);

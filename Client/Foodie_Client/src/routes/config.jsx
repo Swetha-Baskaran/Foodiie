@@ -14,7 +14,8 @@ const Layout = React.lazy(() => import("../components/layout/layout"));
 
 // Replace this with your actual authentication logic (e.g., check for a valid JWT token)
 const isLoggedIn = () => {
-	const token = localStorage.getItem("jwtToken");
+	// const token = localStorage.getItem("jwtToken");
+	const token = "test";
 	return !!token; // Return true if the token exists; otherwise, false
 };
 
