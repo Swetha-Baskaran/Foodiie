@@ -1,5 +1,11 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
+const bcrypt = require("bcrypt");
+
+const hashPassword = async password => {
+	const saltRounds = 10;
+	return await bcrypt.hash(password, saltRounds);
+};
 
 const requireAuthentication = (req, res, next) => {
 	try {
@@ -26,4 +32,4 @@ const requireAuthentication = (req, res, next) => {
 	}
 };
 
-module.exports = {requireAuthentication};
+module.exports = {requireAuthentication, hashPassword};

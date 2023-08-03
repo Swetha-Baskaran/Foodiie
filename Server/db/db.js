@@ -21,7 +21,7 @@ pool.connect((err, client, release) => {
 });
 
 try {
-	pool.query("SELECT * FROM admin", (err, result) => {
+	pool.query("SELECT * FROM users", (err, result) => {
 		if (err) {
 			console.error("Error executing query", err);
 			return;

@@ -1,19 +1,13 @@
 const pool = require("../db/db");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const {hashPassword} = require("../middlewares/authentication");
 require("dotenv").config();
 
 const registerUser = async (req, res) => {
 	try {
-		const {
-			username,
-			email,
-			password,
-			full_name,
-			date_of_birth,
-			address,
-			profile_pic_url,
-		} = req.body;
+		const {username, email, password, full_name, date_of_birth, address} =
+			req.body;
 
 		// Check if the username or email already exists in the database
 		const existingUser = await pool.query(
@@ -32,19 +26,11 @@ const registerUser = async (req, res) => {
 
 		// Insert the user into the users table
 		const newUser = await pool.query(
-			"INSERT INTO users (username, email, password, full_name, date_of_birth, address, profile_pic_url) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
-			[
-				username,
-				email,
-				hashedPassword,
-				full_name,
-				date_of_birth,
-				address,
-				profile_pic_url,
-			]
+			"INSERT INTO users (username, email, password, full_name, date_of_birth, address) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
+			[username, email, hashedPassword, full_name, date_of_birth, address]
 		);
 
-		res.status(201).json(newUser.rows[0]);
+		res.status(200).json(newUser.rows[0]);
 	} catch (error) {
 		console.error("Error registering user:", error);
 		res.status(500).json({error: "Internal Server Error"});
@@ -62,18 +48,18 @@ const loginUser = async (req, res) => {
 
 		// If the user is not found, return an error
 		if (user.rows.length === 0) {
-			return res.status(401).json({error: "Invalid credentials"});
+			return res.status(400).json({error: "Invalid credentials"});
 		}
 
 		// Compare the provided password with the hashed password in the database
 		const isValidPassword = await bcrypt.compare(
-			password,
+			hashPassword(password),
 			user.rows[0].password
 		);
 
 		// If the password is incorrect, return an error
 		if (!isValidPassword) {
-			return res.status(401).json({error: "Invalid credentials"});
+			return res.status(400).json({error: "Invalid credentials"});
 		}
 
 		// User is authenticated, generate an authentication token (JWT)
@@ -92,6 +78,5 @@ const loginUser = async (req, res) => {
 		res.status(500).json({error: "Internal Server Error"});
 	}
 };
-
 
 module.exports = {registerUser, loginUser};
