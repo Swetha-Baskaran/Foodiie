@@ -6,8 +6,7 @@ require("dotenv").config();
 
 const registerUser = async (req, res) => {
 	try {
-		const {username, email, password, full_name, date_of_birth, address} =
-			req.body;
+		const {username, email, password} = req.body;
 
 		// Check if the username or email already exists in the database
 		const existingUser = await pool.query(
@@ -26,8 +25,8 @@ const registerUser = async (req, res) => {
 
 		// Insert the user into the users table
 		const newUser = await pool.query(
-			"INSERT INTO users (username, email, password, full_name, date_of_birth, address) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
-			[username, email, hashedPassword, full_name, date_of_birth, address]
+			"INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING *",
+			[username, email, hashedPassword]
 		);
 
 		res.status(200).json(newUser.rows[0]);
