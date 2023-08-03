@@ -25,7 +25,7 @@ const registerUser = async (req, res) => {
 
 		// Insert the user into the users table
 		const newUser = await pool.query(
-			"INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING *",
+			"INSERT INTO users (username, email, password, full_name) VALUES ($1, $2, $3, $1) RETURNING *",
 			[username, email, hashedPassword]
 		);
 
@@ -52,8 +52,8 @@ const loginUser = async (req, res) => {
 
 		// Compare the provided password with the hashed password in the database
 		const isValidPassword = await bcrypt.compare(
-			hashPassword(password),
-			user.rows[0].password
+			password, // Pass the raw password here
+			user.rows[0].password // Pass the hashed password from the database here
 		);
 
 		// If the password is incorrect, return an error

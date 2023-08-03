@@ -1,10 +1,10 @@
+import {useState} from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -16,31 +16,24 @@ import axios from "axios";
 const theme = createTheme();
 
 export default function Login() {
-	const handleSubmit = event => {
+	const navigate = useNavigate();
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	const [error, setError] = useState("");
+
+	const handleSubmit = async event => {
 		event.preventDefault();
-		const data = new FormData(event.currentTarget);
-		console.log({
-			email: data.get("email"),
-			password: data.get("password"),
-		});
-	};
 
-	const loginUser = async () => {
 		try {
-			const url = "http://localhost:3000/users/login"; // Correct backend URL
-			const userData = {
-				username: "crazyDev",
-				password:
-					"secretpassword",
-			};
-
-			const response = await axios.post(url, userData);
-
-			// Assuming the server responds with a JSON object containing the token
+			const url = "http://https://foodiie-navy.vercel.app/users/login";
+			const response = await axios.post(url, {username: email, password});
 			const {token} = response.data;
 			console.log("Authentication token:", token);
+			localStorage.setItem("jwtToken", token);
+			navigate("/");
 		} catch (error) {
 			console.error("Error logging in:", error.message);
+			setError("Invalid credentials. Please try again.");
 		}
 	};
 
@@ -52,23 +45,6 @@ export default function Login() {
 				sx={{height: "100vh"}}
 				className='auth'
 			>
-				<CssBaseline />
-				<Grid
-					item
-					xs={false}
-					sm={4}
-					md={7}
-					sx={{
-						backgroundImage: "url(https://source.unsplash.com/random)",
-						backgroundRepeat: "no-repeat",
-						backgroundColor: t =>
-							t.palette.mode === "light"
-								? t.palette.grey[50]
-								: t.palette.grey[900],
-						backgroundSize: "cover",
-						backgroundPosition: "center",
-					}}
-				/>
 				<Grid
 					item
 					xs={12}
@@ -103,11 +79,13 @@ export default function Login() {
 								margin='normal'
 								required
 								fullWidth
-								id='email'
-								label='Email Address'
-								name='email'
-								autoComplete='email'
+								id='username'
+								label='Username'
+								name='username'
+								autoComplete='username'
 								autoFocus
+								value={email}
+								onChange={e => setEmail(e.target.value)}
 							/>
 							<TextField
 								margin='normal'
@@ -118,6 +96,8 @@ export default function Login() {
 								type='password'
 								id='password'
 								autoComplete='current-password'
+								value={password}
+								onChange={e => setPassword(e.target.value)}
 							/>
 							<FormControlLabel
 								control={<Checkbox value='remember' color='primary' />}
@@ -128,12 +108,10 @@ export default function Login() {
 								fullWidth
 								variant='contained'
 								sx={{mt: 3, mb: 2}}
-								onClick={() => {
-									loginUser();
-								}}
 							>
 								Sign In
 							</Button>
+							{error && <Typography color='error'>{error}</Typography>}
 							<Grid container>
 								<Grid item xs>
 									<Link to='/forgot-password' variant='body2'>
