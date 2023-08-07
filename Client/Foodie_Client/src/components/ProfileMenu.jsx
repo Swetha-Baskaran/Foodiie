@@ -53,10 +53,11 @@ const ProfileMenu = ({menuPopupOpen, handleClick}) => {
 				<ListItemIcon>
 					<Settings fontSize='small' />
 				</ListItemIcon>
-				Orders
+				My Orders
 			</MenuItem>
 			<MenuItem
 				onClick={() => {
+					localStorage.removeItem("jwtToken")
 					navigate("/login");
 				}}
 			>

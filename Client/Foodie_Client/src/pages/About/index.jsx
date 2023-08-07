@@ -31,10 +31,7 @@ const About = () => {
 				py={7}
 				sx={{display: "flex", justifyContent: "space-evenly"}}
 			>
-				<Grid item md={4} sx={{borderRadius: "5px"}}>
-					<img src={food1} />
-				</Grid>
-				<Grid item md={8} pl={{md: 9}} pt={{xs: 6, md: 0}}>
+				<Grid item md={8} pr={{md: 9}} pt={{xs: 6, md: 0}}>
 					<Typography sx={{fontWeight: "bolder"}} pb={4} variant='h3'>
 						People who loves to eat are always the best people
 					</Typography>
@@ -42,6 +39,9 @@ const About = () => {
 						It is a long established factor that a reader will distracted
 						by the readable content of a page when looking at its layout
 					</Typography>
+				</Grid>
+				<Grid item md={4} sx={{borderRadius: "5px"}}>
+					<img src={food1} />
 				</Grid>
 			</Grid>
 			<Grid py={5} sx={{textAlign: "center"}}>

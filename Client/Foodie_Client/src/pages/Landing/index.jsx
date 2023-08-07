@@ -37,6 +37,20 @@ const Content = ({text}) => {
 
 const Home = () => {
 	const navigate = useNavigate();
+	const features = [
+		{
+			title: "Best Quality",
+			text: "At Foodie App, we pride ourselves on delivering the best quality food that excites your taste buds and leaves you craving for more.",
+		},
+		{
+			title: "Handpicked Ingredients",
+			text: "We source only the freshest and finest ingredients to ensure every dish is bursting with flavors.",
+		},
+		{
+			title: "Fast & Reliable Delivery",
+			text: "We understand your hunger can't wait. Our efficient delivery service ensures your food reaches you hot and fresh, right at your doorstep, whenever you need it.",
+		},
+	];
 	return (
 		<>
 			<Grid px={{xs: 3, md: 7}}>
@@ -53,10 +67,13 @@ const Home = () => {
 						<Typography sx={{fontWeight: "bolder"}} pb={2} variant='h3'>
 							delivered to you
 						</Typography>
-						<Typography sx={{fontSize: "2rem"}} mb={8}>
+						<Typography sx={{fontSize: "2rem"}} mb={3}>
 							It is a long established factor that a reader will
 							distracted by the readable content of a page when looking
 							at its layout
+						</Typography>
+						<Typography sx={{fontSize: "2rem"}} mb={8}>
+							Network of verified home bakers....
 						</Typography>
 						<Button
 							size='large'
@@ -90,7 +107,7 @@ const Home = () => {
 						mx={0}
 						sx={{display: "flex", justifyContent: "center"}}
 					>
-						{[1, 2, 3].map((e, index) => {
+						{features.map((feature, index) => {
 							return (
 								<Grid
 									key={index}
@@ -119,13 +136,9 @@ const Home = () => {
 										}}
 									/>
 									<Typography variant='h6' sx={{fontWeight: "bolder"}}>
-										Best Quality
+										{feature.title}
 									</Typography>
-									<Typography>
-										It is a long established factor that a reader will
-										distracted by the readable content of a page when
-										looking at its layout
-									</Typography>
+									<Typography>{feature.text}</Typography>
 								</Grid>
 							);
 						})}
@@ -182,7 +195,7 @@ const Home = () => {
 				<Grid py={7}>
 					<SubTitle text='food lovers feedback' />
 					<Content text='' />
-					<Grid container spacing={{xs: 3, md: 7}} pt={9}>
+					<Grid container spacing={{xs: 3, md: 7}} pt={4}>
 						{[1, 1, 1].map((e, index) => {
 							return (
 								<Grid item xs={12} sm={6} md={6} lg={4} key={index}>

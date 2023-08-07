@@ -31,10 +31,6 @@ const navItems = [
 		link: "/dishes",
 	},
 	{
-		name: "Contact",
-		link: "/contact",
-	},
-	{
 		name: "About",
 		link: "/about",
 	},

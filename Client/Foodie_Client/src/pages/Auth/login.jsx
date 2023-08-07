@@ -25,10 +25,10 @@ export default function Login() {
 		event.preventDefault();
 
 		try {
-			const url = "https://foodiie-navy.vercel.app/users/login";
+			const url = "http://localhost:3000/users/login";
 			const response = await axios.post(url, {
-				username: "swethab@pec.edu",
-				password: "swetha",
+				username: email,
+				password,
 			});
 			const {token} = response.data;
 			console.log("Authentication token:", token);
