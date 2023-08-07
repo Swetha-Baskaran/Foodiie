@@ -25,7 +25,7 @@ export default function Login() {
 		event.preventDefault();
 
 		try {
-			const url = "http://localhost:3000/users/login";
+			const url = "https://foodiie-navy.vercel.app/users/login";
 			const response = await axios.post(url, {
 				username: email,
 				password,
